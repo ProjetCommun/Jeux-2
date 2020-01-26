@@ -8,14 +8,12 @@ public class Boss1 extends GameObject{
 	
 	private int WidthBoss = 50;
 	private int HEIGHTbasicEnemy = 50;
-	private Handler handler;
 	
 
 	public Boss1(float x, float y, ID id, Handler handler) {
 		super(x, y, id);
 		velX=10;
 		velY=10;
-		this.handler= handler;
 	
 	}
 

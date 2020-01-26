@@ -1,6 +1,7 @@
 package com.main;
 
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Spawner {
 	
@@ -12,7 +13,7 @@ public class Spawner {
 	private GameObject gameObject;
 	private boolean BossAlive=false;
 	private boolean WeirdRoom=false;
-	
+
 	private Random r=new Random();
 	
 	private int ScoreKeep=0;
@@ -25,6 +26,7 @@ public class Spawner {
 	public void tick()
 	{
 		ScoreKeep++;
+		Limitor=ThreadLocalRandom.current().nextInt(0, 20 + 1);;
 		Boss1();
 		Boss2();
 		basicSpawn();
@@ -41,7 +43,8 @@ public class Spawner {
 			for(int i=0; i<handler.object.size();i++)
 			{
 				gameObject=handler.object.get(i);
-				if(gameObject.getId()!=ID.Player&&gameObject.getId()!=ID.Boss2&&gameObject.getId()!=ID.Trail&&gameObject.getId()!=ID.Boss2Bullet) {
+				if(gameObject.getId()!=ID.Player&&gameObject.getId()!=ID.Boss2
+						&&gameObject.getId()!=ID.Trail&&gameObject.getId()!=ID.Boss2Bullet) {
 					handler.removeObject(gameObject);
 				}
 			}
@@ -50,18 +53,23 @@ public class Spawner {
 				hud.setLevel(12);
 				ScoreKeep=regulator+1;
 				Slower=200;
-				Limitor=59;
-				for(int i=0; i<handler.object.size();i++)
+				Limitor=12;
+				float xPlayer=0;
+				float yPlayer=0;
+				for(int i=0;i<handler.object.size();i++)
 				{
 					gameObject=handler.object.get(i);
-					if(gameObject.getId()==ID.Boss2||gameObject.getId()==ID.Boss2Bullet) {
-						handler.removeObject(gameObject);
-						BossAlive=false;
+					if(gameObject.getId()==ID.Player) 
+					{
+						 xPlayer= gameObject.x;
+						 yPlayer= gameObject.y;
 					}
 				}
+				handler.object.clear();
+				handler.addObject(new Player(xPlayer, yPlayer, ID.Player, handler));
+				BossAlive=false;
+			}	
 			}
-			}
-		
 	}
 
 	private void Boss1()
@@ -71,11 +79,11 @@ public class Spawner {
 		{
 			if(BossAlive==false) {
 				ScoreKeep=0;
-				handler.addObject(new Boss1(r.nextInt(Game.WIDTH-70), r.nextInt(Game.HEIGHT-70), ID.Boss1,handler));	
+				handler.addObject(new Boss1(r.nextInt(Game.WIDTH-100), r.nextInt(Game.HEIGHT-100), ID.Boss1,handler));	
 				BossAlive=true;
 			}
 			
-			for(int i=0; i<handler.object.size()-1;i++)
+			for(int i=0; i<handler.object.size();i++)
 			{
 //				u = i;
 				gameObject=handler.object.get(i);
@@ -88,7 +96,7 @@ public class Spawner {
 				hud.setLevel(6);
 				ScoreKeep=regulator+1;
 				Slower=200;
-				Limitor=59;
+				Limitor=60;
 				for(int i=0; i<handler.object.size();i++)
 				{
 					gameObject=handler.object.get(i);
@@ -108,7 +116,6 @@ public class Spawner {
 		if(ScoreKeep>= regulator)
 		{
 			ScoreKeep=0;
-			Limitor++;
 			regulator=regulator*2;
 			if(regulator>Slower)
 				regulator=Slower/2;
@@ -118,9 +125,8 @@ public class Spawner {
 				hud.setLevel(6);
 				WeirdRoom=true;
 				}
-		
 			if(Limitor%3==0)
-				handler.addObject(new basicEnemy(r.nextInt(Game.WIDTH-70), r.nextInt(Game.HEIGHT-70), ID.basicEnnemy,handler));
+				handler.addObject(new basicEnemy(r.nextInt(Game.WIDTH-80), r.nextInt(Game.HEIGHT-80), ID.basicEnnemy,handler));
 			if(Limitor%4==0)
 				handler.addObject(new fastEnemy(r.nextInt(Game.WIDTH-70), r.nextInt(Game.HEIGHT-70), ID.fastEnnemy,handler));
 			if(Limitor%5==0) {

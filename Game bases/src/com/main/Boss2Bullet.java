@@ -34,9 +34,7 @@ public class Boss2Bullet extends GameObject{
 			velX*=-1;
 		else if(x+WidthBullet>= Game.WIDTH)
 			handler.removeObject(this);
-		
-		handler.addObject(new Trail(x, y, ID.Trail, WidthBullet, HeightBullet, 0.05f, Color.magenta, handler));
-		
+
 	}
 
 	@Override

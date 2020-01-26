@@ -22,13 +22,17 @@ public class Boss2 extends GameObject{
 	}
 
 	public void tick() {
-		if(timer<=0) {
+		if(timer<=0) 
+		{
 			velY=0;
 			timer2--;
 			if(timer2==0) 
 				velX=2;
-			else if(timer2<0&&r.nextInt(10)==0)
-				handler.addObject(new Boss2Bullet(x+WidthBoss2/2, y+HeigthBoss2/2, ID.Boss2Bullet, handler));}	
+			else if(timer2<0&&r.nextInt(5)==0) 
+			{
+				handler.addObject(new Boss2Bullet(x+WidthBoss2/2, y+HeigthBoss2/2, ID.Boss2Bullet, handler));
+			}
+		}
 		else timer--;
 		
 		if(x<=0 || x+WidthBoss2+18>=Game.WIDTH)
