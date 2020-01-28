@@ -34,7 +34,9 @@ public class Player extends GameObject{
 		for(int i=0; i<handler.object.size();i++)
 		{
 			GameObject tempObject = handler.object.get(i);
-			if(tempObject.getId()==ID.basicEnnemy||tempObject.getId()==ID.fastEnnemy||tempObject.getId()==ID.smartEnnemy||tempObject.getId()==ID.Boss2Bullet)
+			if(tempObject.getId()==ID.basicEnnemy||tempObject.getId()==ID.fastEnnemy
+					||tempObject.getId()==ID.smartEnnemy||tempObject.getId()==ID.Boss2Bullet
+					||tempObject.getId()==ID.Boss3Laser)
 			{
 				if(getBounds().intersects(tempObject.getBounds()))
 				{

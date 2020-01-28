@@ -10,6 +10,8 @@ public enum ID {
 	Boss1,
 	Boss2,
 	Boss2Bullet,
+	Boss3,
+	Boss3Laser,
 	Trail();
 
 }

@@ -9,7 +9,7 @@ public class Spawner {
 	private HUD hud;
 	private int regulator=100;
 	private int Slower=200;
-	private int Limitor=2;
+	private int Limitor=3;
 	private GameObject gameObject;
 	private boolean BossAlive=false;
 	private boolean WeirdRoom=false;
@@ -26,11 +26,55 @@ public class Spawner {
 	public void tick()
 	{
 		ScoreKeep++;
-		Limitor=ThreadLocalRandom.current().nextInt(0, 20 + 1);;
+		basicSpawn();
+		Limitor=ThreadLocalRandom.current().nextInt(4, 25 + 1);;
 		Boss1();
 		Boss2();
-		basicSpawn();
+		Boss3();
+		
 	}
+	private void Boss3()
+	{
+		if(hud.getLevel()==1)
+		{
+			if(BossAlive==false) {
+				ScoreKeep=0;
+				handler.addObject(new Boss3(Game.WIDTH/3,100, ID.Boss3 , handler));	
+				BossAlive=true;
+			}
+			for(int i=0; i<handler.object.size();i++)
+			{
+				gameObject=handler.object.get(i);
+				if(gameObject.getId()!=ID.Player&&gameObject.getId()!=ID.Boss3
+						&&gameObject.getId()!=ID.Trail&&gameObject.getId()!=ID.Boss3Laser
+						) {
+					handler.removeObject(gameObject);
+				}
+			}
+			if(ScoreKeep>=10000)
+			{
+				hud.setLevel(12);
+				ScoreKeep=regulator+1;
+				Slower=200;
+				Limitor=12;
+				float xPlayer=0;
+				float yPlayer=0;
+				for(int i=0;i<handler.object.size();i++)
+				{
+					gameObject=handler.object.get(i);
+					if(gameObject.getId()==ID.Player) 
+					{
+						 xPlayer= gameObject.x;
+						 yPlayer= gameObject.y;
+					}
+				}
+				handler.object.clear();
+				handler.addObject(new Player(xPlayer, yPlayer, ID.Player, handler));
+				BossAlive=false;
+			}	
+			}
+	}
+	
 	private void Boss2()
 	{
 		if(hud.getLevel()==11)
@@ -113,6 +157,10 @@ public class Spawner {
 	{
 		if(BossAlive==false)
 		{	
+			if(Limitor==3)
+			{
+				handler.addObject(new Player(Game.WIDTH/2-32, Game.HEIGHT/2-32, ID.Player, handler));
+			}
 		if(ScoreKeep>= regulator)
 		{
 			ScoreKeep=0;
@@ -125,7 +173,7 @@ public class Spawner {
 				hud.setLevel(6);
 				WeirdRoom=true;
 				}
-			if(Limitor%3==0)
+//			if(Limitor%3==0)
 				handler.addObject(new basicEnemy(r.nextInt(Game.WIDTH-80), r.nextInt(Game.HEIGHT-80), ID.basicEnnemy,handler));
 			if(Limitor%4==0)
 				handler.addObject(new fastEnemy(r.nextInt(Game.WIDTH-70), r.nextInt(Game.HEIGHT-70), ID.fastEnnemy,handler));
